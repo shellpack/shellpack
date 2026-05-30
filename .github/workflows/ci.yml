@@ -1,0 +1,57 @@
+name: ci
+
+# Lint and test on every push and pull request. The tests run the command
+# as a subprocess and need shfmt, which shellpack reads the syntax tree
+# from; it is installed from the distribution's package on each runner.
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    name: lint
+    timeout-minutes: 5
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7 # v10.2.0
+      # The same hooks a developer runs on commit, so the two cannot
+      # drift; ruff comes from the locked dev group.
+      - run: uvx pre-commit run --all-files --show-diff-on-failure
+
+  test:
+    name: test (${{ matrix.os }}, py${{ matrix.python }})
+    timeout-minutes: 10
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+        python: ["3.11", "3.14"]
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7 # v10.2.0
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Install shfmt
+        run: |
+          if [ "${RUNNER_OS}" = "macOS" ]; then
+            brew install shfmt
+          else
+            sudo apt-get update
+            sudo apt-get install --yes --no-install-recommends shfmt
+          fi
+          shfmt --version
+      - run: uv sync --locked --group dev
+      - run: uv run --no-sync pytest

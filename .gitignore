@@ -1,0 +1,11 @@
+# Python
+__pycache__/
+*.py[cod]
+
+# Build output
+dist/
+
+# Tool caches and the project environment
+.venv/
+.pytest_cache/
+.ruff_cache/

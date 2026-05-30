@@ -1,0 +1,24 @@
+# The checks the ci workflow's lint job runs, as hooks. Ruff runs from
+# the locked dev group, so uv.lock is its only pin.
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: check-added-large-files
+      - id: check-toml
+      - id: check-yaml
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+
+  - repo: local
+    hooks:
+      - id: ruff-format
+        name: ruff format
+        entry: uv run --locked --group dev ruff format
+        language: system
+        types: [python]
+      - id: ruff-check
+        name: ruff check
+        entry: uv run --locked --group dev ruff check
+        language: system
+        types: [python]

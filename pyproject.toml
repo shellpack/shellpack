@@ -1,0 +1,51 @@
+[project]
+name = "shellpack"
+version = "0.1.0"
+description = "Pack a shell script and the fragments it sources into one standalone file"
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "NeuMagic, Inc." }]
+requires-python = ">=3.11"
+dependencies = ["rich-click>=1.8"]
+keywords = ["shell", "bash", "bundle", "inline", "source", "shellcheck", "shfmt"]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Environment :: Console",
+  "Intended Audience :: Developers",
+  "Intended Audience :: System Administrators",
+  "Operating System :: POSIX",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
+  "Topic :: Software Development :: Build Tools",
+  "Topic :: System :: Systems Administration",
+]
+
+[project.urls]
+Homepage = "https://github.com/shellpack/shellpack"
+Source = "https://github.com/shellpack/shellpack"
+Issues = "https://github.com/shellpack/shellpack/issues"
+
+[project.scripts]
+shellpack = "shellpack.cli:main"
+
+[build-system]
+requires = ["uv_build>=0.12.3,<0.13.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = ["pytest>=9", "ruff>=0.16"]
+
+[tool.ruff]
+line-length = 88
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "W"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"
