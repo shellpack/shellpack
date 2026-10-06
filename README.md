@@ -1,3 +1,10 @@
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/shellpack/shellpack/main/assets/logo/shellpack-logo-on-dark.png">
+    <img alt="shellpack" width="360" src="https://raw.githubusercontent.com/shellpack/shellpack/main/assets/logo/shellpack-logo.png">
+  </picture>
+</p>
+
 # shellpack
 
 Pack a shell script and the fragments it sources into one standalone file, or a
